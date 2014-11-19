@@ -3,6 +3,7 @@ package at.bfarka.sonar.qualitygate
 
 import org.gradle.api.Plugin
 import org.gradle.api.Project
+import org.gradle.testfixtures.ProjectBuilder
 import org.junit.Assert
 import org.junit.Test
 import java.util.Properties
@@ -26,10 +27,22 @@ public class SonarQualityGatePluginTest {
         String implClass = prop.getProperty("implementation-class");
 
         Class<Plugin> pluginClass = Class.forName(implClass);
-        Plugin<Project> sshScpPlugin = pluginClass.newInstance();
-        assertNotNull(sshScpPlugin);
-        assertTrue(sshScpPlugin instanceof SonarQualityGatePlugin);
+        Plugin<Project> sonarQualityGatePlugin = pluginClass.newInstance();
+        assertNotNull(sonarQualityGatePlugin);
+        assertTrue(sonarQualityGatePlugin instanceof SonarQualityGatePlugin);
 
+    }
+
+    @Test
+    public void testPluginInitialisation(){
+        Project project = ProjectBuilder.builder().build()
+        project.apply plugin: 'at.bfarka.sonar.qualitygate'
+        def extension = project.extensions.findByName("sonarQualityGate")
+        Assert.assertNotNull(extension)
+        Assert.assertTrue(extension instanceof SonarQualityGateExtension)
+
+        def task = project.tasks.findByName("sonarQualityGate")
+        Assert.assertTrue(task instanceof QualityGateTask);
     }
 
 }

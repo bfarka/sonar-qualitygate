@@ -9,6 +9,11 @@ import org.gradle.api.Project
 class SonarQualityGatePlugin implements Plugin<Project>{
     @Override
     void apply(Project project) {
+        project.extensions.add("sonarQualityGate",new SonarQualityGateExtension())
+
+
+        project.task('sonarQualityGate',type: QualityGateTask)
+
 
     }
 }
