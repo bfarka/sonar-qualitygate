@@ -1,0 +1,20 @@
+language: java
+
+jdk:
+  - oraclejdk8
+  - oraclejdk7
+  - openjdk6
+
+cache:
+  directories:
+  - $HOME/.gradle
+
+env:
+    - GRADLE_VERSION=2.2.1-rc-1
+    - GRADLE_VERSION=2.2
+    - GRADLE_VERSION=2.1
+    - GRADLE_VERSION=2.0
+install:
+    - ./gradlew wrapper -PgradleVersion=$GRADLE_VERSION
+
+script: ./gradlew build
