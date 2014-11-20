@@ -4,12 +4,15 @@ package at.bfarka.sonar.qualitygate
 import org.gradle.api.Plugin
 import org.gradle.api.Project
 import org.gradle.testfixtures.ProjectBuilder
+import org.hamcrest.Matchers
 import org.junit.Assert
 import org.junit.Test
 import java.util.Properties
 
+import static org.hamcrest.Matchers.contains
 import static org.junit.Assert.assertNotNull
 import static org.junit.Assert.assertNotNull
+import static org.junit.Assert.assertThat
 import static org.junit.Assert.assertTrue
 
 /**
@@ -43,6 +46,55 @@ public class SonarQualityGatePluginTest {
 
         def task = project.tasks.findByName("sonarQualityGate")
         Assert.assertTrue(task instanceof QualityGateTask);
+
     }
+
+    @Test
+    public void testDependsWithLateApply(){
+        Project project = ProjectBuilder.builder().build();
+
+
+        project.apply plugin: "at.bfarka.sonar.qualitygate"
+        // deploy sonar-runner late (after qualitygate)
+        project.apply plugin: "sonar-runner"
+
+        assertTrue(project.tasks.findByName("sonarQualityGate").getDependsOn().contains(project.tasks.findByName("sonarRunner")))
+    }
+
+
+    @Test
+    public void testDependswithEarlyApply(){
+        Project project = ProjectBuilder.builder().build();
+
+        // deploy sonar-runner early (before qualitygate)
+        project.apply plugin: "sonar-runner"
+        project.apply plugin: "at.bfarka.sonar.qualitygate"
+
+        assertTrue(project.tasks.findByName("sonarQualityGate").getDependsOn().contains(project.tasks.findByName("sonarRunner")))
+
+    }
+
+
+    @Test
+    public void testPluginWithSonarExtension(){
+        Project project = ProjectBuilder.builder().build();
+
+        project.apply plugin: "at.bfarka.sonar.qualitygate"
+        project.apply plugin: "sonar-runner"
+
+        project.sonarRunner{
+                sonarProperties{
+                    property "sonarHostUrl","hostUrl"
+                }
+            }
+
+
+        QualityGateTask task = project.tasks.findByName("sonarQualityGate")
+        task.execute();
+        println task.sonarHostUrl
+
+
+    }
+
 
 }
