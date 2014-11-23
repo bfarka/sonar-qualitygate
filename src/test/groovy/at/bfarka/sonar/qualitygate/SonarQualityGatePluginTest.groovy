@@ -10,8 +10,10 @@ import org.junit.Test
 import java.util.Properties
 
 import static org.hamcrest.Matchers.contains
+import static org.hamcrest.Matchers.equalTo
 import static org.junit.Assert.assertNotNull
 import static org.junit.Assert.assertNotNull
+import static org.junit.Assert.assertThat
 import static org.junit.Assert.assertThat
 import static org.junit.Assert.assertTrue
 
@@ -91,10 +93,30 @@ public class SonarQualityGatePluginTest {
 
         QualityGateTask task = project.tasks.findByName("sonarQualityGate")
         task.execute();
-        println task.sonarHostUrl
-
+        assertThat(task.sonarHostUrl, equalTo("hostUrl"))
 
     }
 
+    @Test
+    public void testExtension() {
+        Project project = ProjectBuilder.builder().build();
 
+        project.apply plugin: "at.bfarka.sonar.qualitygate"
+        project.apply plugin: "sonar-runner"
+
+        project.sonarRunner{
+            sonarProperties{
+                property "sonarHostUrl","hostUrl"
+            }
+        }
+
+        project.sonarQualityGate {
+            sonarHostUrl 'testUrl'
+        }
+
+
+        QualityGateTask task = project.tasks.findByName("sonarQualityGate")
+        task.execute()
+        Assert.assertThat(task.sonarHostUrl, equalTo('testUrl'))
+    }
 }
