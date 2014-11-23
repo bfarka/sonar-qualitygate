@@ -4,17 +4,11 @@ package at.bfarka.sonar.qualitygate
 import org.gradle.api.Plugin
 import org.gradle.api.Project
 import org.gradle.testfixtures.ProjectBuilder
-import org.hamcrest.Matchers
 import org.junit.Assert
 import org.junit.Test
-import java.util.Properties
 
-import static org.hamcrest.Matchers.contains
 import static org.hamcrest.Matchers.equalTo
 import static org.junit.Assert.assertNotNull
-import static org.junit.Assert.assertNotNull
-import static org.junit.Assert.assertThat
-import static org.junit.Assert.assertThat
 import static org.junit.Assert.assertThat
 import static org.junit.Assert.assertTrue
 
@@ -48,7 +42,7 @@ public class SonarQualityGatePluginTest {
         Assert.assertTrue(extension instanceof SonarQualityGateExtension)
 
         def task = project.tasks.findByName("sonarQualityGate")
-        Assert.assertTrue(task instanceof QualityGateTask);
+        Assert.assertTrue(task instanceof SonarQualityGateTask);
 
     }
 
@@ -94,7 +88,7 @@ public class SonarQualityGatePluginTest {
             }
 
 
-        QualityGateTask task = project.tasks.findByName("sonarQualityGate")
+        SonarQualityGateTask task = project.tasks.findByName("sonarQualityGate")
         task.execute();
         assertThat(task.sonarHostUrl, equalTo("hostUrl"))
         assertThat(task.sonarProjectKey, equalTo("projectKey"))
@@ -124,7 +118,7 @@ public class SonarQualityGatePluginTest {
         }
 
 
-        QualityGateTask task = project.tasks.findByName("sonarQualityGate")
+        SonarQualityGateTask task = project.tasks.findByName("sonarQualityGate")
         task.execute()
         assertThat(task.sonarHostUrl, equalTo('testUrl'))
         assertThat(task.sonarBranch, equalTo('testBranch'))

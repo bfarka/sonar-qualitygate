@@ -13,7 +13,7 @@ class SonarQualityGatePlugin implements Plugin<Project> {
         project.extensions.add("sonarQualityGate",  SonarQualityGateExtension.class)
 
 
-        QualityGateTask task = project.task('sonarQualityGate', type: QualityGateTask)
+        SonarQualityGateTask task = project.task('sonarQualityGate', type: SonarQualityGateTask)
 
         task.conventionMapping.sonarHostUrl = conventionMapping("sonarHostUrl","sonar.host.url", project)
         task.conventionMapping.sonarBranch = conventionMapping("sonarBranch", "sonar.branch", project)

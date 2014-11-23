@@ -1,6 +1,7 @@
 apply plugin: 'groovy'
 apply plugin: 'jacoco'
 apply plugin: 'com.github.kt3k.coveralls'
+apply plugin: 'sonar-runner'
 
 buildscript {
     repositories {
@@ -11,6 +12,12 @@ buildscript {
         classpath 'org.kt3k.gradle.plugin:coveralls-gradle-plugin:2.0.1'
     }
 }
+
+sourceSets {
+    intTest
+}
+sourceSets.intTest.compileClasspath += sourceSets.test.runtimeClasspath
+
 
 jacocoTestReport {
     reports {
@@ -23,9 +30,16 @@ repositories {
     jcenter()
 }
 
+task intTest(type: Test) {
+    testClassesDir = sourceSets.intTest.output.classesDir
+    classpath = sourceSets.intTest.runtimeClasspath + sourceSets.main.runtimeClasspath
+}
+
 dependencies {
+
     compile gradleApi()
     compile localGroovy()
+
     testCompile 'junit:junit:4.11'
     testCompile 'org.hamcrest:hamcrest-all:1.3'
     testCompile "org.mockito:mockito-core:1.+"
@@ -38,4 +52,11 @@ task wrapper(type: Wrapper) {
         gradleVersion = '2.2'
     }
 
+}
+
+sonarRunner{
+    toolVersion "2.4"
+    sonarProperties{
+        property 'sonar.host.url','http://localhost:9000'
+    }
 }
