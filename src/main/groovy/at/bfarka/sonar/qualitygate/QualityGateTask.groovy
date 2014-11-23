@@ -10,5 +10,9 @@ class QualityGateTask extends DefaultTask{
 
     @Input
     String sonarHostUrl;
+    @Input
+    String sonarProjectKey;
+    @Input
+    String sonarBranch
 
 }

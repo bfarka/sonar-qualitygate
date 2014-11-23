@@ -15,7 +15,9 @@ class SonarQualityGatePlugin implements Plugin<Project> {
 
         QualityGateTask task = project.task('sonarQualityGate', type: QualityGateTask)
 
-        task.conventionMapping.sonarHostUrl = conventionMapping("sonarHostUrl", project)
+        task.conventionMapping.sonarHostUrl = conventionMapping("sonarHostUrl","sonar.host.url", project)
+        task.conventionMapping.sonarBranch = conventionMapping("sonarBranch", "sonar.branch", project)
+        task.conventionMapping.sonarProjectKey = conventionMapping("sonarProjectKey","sonar.projectKey", project)
 
         project.tasks.whenTaskAdded({ addedTask ->
             if (addedTask.name == "sonarRunner") {
@@ -31,7 +33,7 @@ class SonarQualityGatePlugin implements Plugin<Project> {
     }
 
 
-    def conventionMapping(def propName, Project project) {
+    def conventionMapping(def propName,def sonarRunnerName, Project project) {
         return {
             def sonarRunner = project.tasks.findByName("sonarRunner");
             def sonarQualityGate = project.extensions.findByName("sonarQualityGate");
@@ -40,7 +42,7 @@ class SonarQualityGatePlugin implements Plugin<Project> {
             if (returnValue == null) {
 
                 if ((sonarRunner != null) && sonarRunner.sonarProperties != null) {
-                    returnValue = sonarRunner.sonarProperties[propName]
+                    returnValue = sonarRunner.sonarProperties[sonarRunnerName]
 
                 }
 

@@ -5,4 +5,8 @@ package at.bfarka.sonar.qualitygate
  */
 class SonarQualityGateExtension {
     String sonarHostUrl
+
+    String sonarProjectKey
+
+    String sonarBranch
 }

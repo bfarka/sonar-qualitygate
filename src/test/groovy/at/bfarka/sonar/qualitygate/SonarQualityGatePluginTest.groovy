@@ -15,6 +15,7 @@ import static org.junit.Assert.assertNotNull
 import static org.junit.Assert.assertNotNull
 import static org.junit.Assert.assertThat
 import static org.junit.Assert.assertThat
+import static org.junit.Assert.assertThat
 import static org.junit.Assert.assertTrue
 
 /**
@@ -86,7 +87,9 @@ public class SonarQualityGatePluginTest {
 
         project.sonarRunner{
                 sonarProperties{
-                    property "sonarHostUrl","hostUrl"
+                    property "sonar.host.url","hostUrl"
+                    property "sonar.projectKey","projectKey"
+                    property "sonar.branch","branch"
                 }
             }
 
@@ -94,6 +97,8 @@ public class SonarQualityGatePluginTest {
         QualityGateTask task = project.tasks.findByName("sonarQualityGate")
         task.execute();
         assertThat(task.sonarHostUrl, equalTo("hostUrl"))
+        assertThat(task.sonarProjectKey, equalTo("projectKey"))
+        assertThat(task.sonarBranch, equalTo("branch"))
 
     }
 
@@ -106,17 +111,23 @@ public class SonarQualityGatePluginTest {
 
         project.sonarRunner{
             sonarProperties{
-                property "sonarHostUrl","hostUrl"
+                property "sonar.host.url","hostUrl"
+                property "sonar.projectKey", "projectKey"
+                property "sonar.branch", "sonarBranch"
             }
         }
 
         project.sonarQualityGate {
             sonarHostUrl 'testUrl'
+            sonarProjectKey 'testKey'
+            sonarBranch 'testBranch'
         }
 
 
         QualityGateTask task = project.tasks.findByName("sonarQualityGate")
         task.execute()
-        Assert.assertThat(task.sonarHostUrl, equalTo('testUrl'))
+        assertThat(task.sonarHostUrl, equalTo('testUrl'))
+        assertThat(task.sonarBranch, equalTo('testBranch'))
+        assertThat(task.sonarProjectKey, equalTo('testKey'))
     }
 }
