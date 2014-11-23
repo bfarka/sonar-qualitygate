@@ -9,6 +9,6 @@ import org.junit.Test
 class IntegrationTest {
     @Test
     public void foo(){
-        SonarQualityGateTask task = new SonarQualityGateTask();
+        //SonarQualityGateTask task = new SonarQualityGateTask();
     }
 }
