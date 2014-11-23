@@ -19,3 +19,6 @@ install:
     - ./gradlew wrapper -PgradleVersion=$GRADLE_VERSION
 
 script: ./gradlew build
+
+after_success:
+- ./gradlew jacocoTestReport coveralls
