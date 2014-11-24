@@ -22,7 +22,7 @@ class SonarQualityGateTask extends ConventionTask{
 
     public String fetchQualityGateState(){
 
-        String target =  "${getSonarHostUrl()}/api/resources?metrics=alert_status&resource=$getSonarProjectKey()}&format=json"
+        String target =  "${getSonarHostUrl()}/api/resources?metrics=alert_status&resource=${getSonarProjectKey()}&format=json"
 
         def slurper = new JsonSlurper()
 
