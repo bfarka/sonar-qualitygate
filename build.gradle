@@ -61,7 +61,7 @@ task wrapper(type: Wrapper) {
 }
 
 sonarRunner{
-    toolVersion "2.4"
+    
     sonarProperties{
         property 'sonar.host.url','http://localhost:9000'
     }
