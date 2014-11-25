@@ -5,6 +5,8 @@ import at.bfarka.sonar.qualitygate.util.SonarMockRule
 import com.google.common.collect.ImmutableMap
 import org.gradle.api.Project
 import org.gradle.testfixtures.ProjectBuilder
+import org.hamcrest.Matchers
+import org.junit.Assert
 import org.junit.Rule
 import org.junit.Test
 
@@ -38,7 +40,7 @@ class SonarQualityGateTaskTest {
         SonarQualityGateTask task = project.tasks.findByName("sonarQualityGate")
         task.execute();
 
-        task.fetchQualityGateState();
+        Assert.assertThat(task.fetchQualityGateState(), Matchers.equalTo("OK"))
 
     }
 
