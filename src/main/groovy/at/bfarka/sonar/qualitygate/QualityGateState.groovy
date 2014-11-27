@@ -4,7 +4,7 @@ package at.bfarka.sonar.qualitygate
  * Created by berndfarka on 25.11.14.
  */
 enum QualityGateState {
-    OK('OK'), WARNING('WARN'),ERROR('ERROR')
+    OK('OK'), WARNING('WARN'),ERROR('ERROR'), NO_RESULT("NORESULT")
 
 
     private final stringValue
@@ -14,13 +14,7 @@ enum QualityGateState {
     }
 
     public static QualityGateState fromString(def value){
-        this.values().each{
-            if(it.stringValue.equals(value)){
-                return it
-            }
-        }
-        throw new IllegalArgumentException("no value for string ${value} found!")
-
+        return this.values().findResult(NO_RESULT, { it.stringValue.equals(value) ?: null})
     }
 
     public String getStringValue(){
