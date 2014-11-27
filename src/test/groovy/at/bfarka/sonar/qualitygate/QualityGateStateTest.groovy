@@ -1,9 +1,8 @@
 package at.bfarka.sonar.qualitygate
 
-import org.hamcrest.Matchers
-import org.junit.Assert
 import org.junit.Test
 
+import static at.bfarka.sonar.qualitygate.QualityGateState.OK
 import static at.bfarka.sonar.qualitygate.QualityGateState.fromString
 import static org.hamcrest.Matchers.equalTo
 import static org.junit.Assert.assertThat
@@ -14,10 +13,10 @@ import static org.junit.Assert.assertThat
 class QualityGateStateTest {
 
     @Test
-    public void testMapping(){
-        QualityGateState.values().each { state ->
-            assertThat(state, equalTo(fromString(state)))
-        }
+    public void testMapping() {
+        assertThat(OK, equalTo(fromString("OK")))
+        assertThat(QualityGateState.WARNING, equalTo(fromString("WARN")))
+        assertThat(QualityGateState.ERROR, equalTo(fromString("ERROR")))
 
     }
 
