@@ -19,8 +19,11 @@ enum QualityGateState {
                 return it
             }
         }
-        return null
+        throw new IllegalArgumentException("no value for string ${value} found!")
 
     }
 
+    public String getStringValue(){
+        return stringValue
+    }
 }
