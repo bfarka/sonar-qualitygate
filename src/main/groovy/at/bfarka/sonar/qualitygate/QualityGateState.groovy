@@ -14,7 +14,7 @@ enum QualityGateState {
     }
 
     public static QualityGateState fromString(def value){
-        return this.values().findResult(NO_RESULT, { it.stringValue.equals(value) ?: null})
+        return this.values().findResult(NO_RESULT, { it.stringValue.equals(value) ? it : null})
     }
 
     public String getStringValue(){
