@@ -40,6 +40,7 @@ class SonarQualityGateTaskTest {
         test("gateok.json", QualityGateState.OK)
         test("gatewarn.json", QualityGateState.WARNING)
         test("gateerror.json", QualityGateState.ERROR)
+        test("gatemissingresult.json", QualityGateState.NO_RESULT)
 
     }
 
