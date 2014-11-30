@@ -18,7 +18,7 @@ class SonarQualityGateTask extends ConventionTask {
     String sonarBranch
 
 
-    public String fetchQualityGateState() {
+    public QualityGateState fetchQualityGateState() {
 
         String target = "${getSonarHostUrl()}/api/resources?metrics=alert_status&resource=${getSonarProjectKey()}&format=json"
 
@@ -28,15 +28,10 @@ class SonarQualityGateTask extends ConventionTask {
 
         def status = null
 
-        results.each { result ->
-            status = result.msr.find {
-                println it
-                it.key.equals('alert_status')
-            }.data
+        status = results.findResult { result ->
+            result?.msr?.find { msr -> 'alert_status'.equals(msr.key) }?.data
         }
-
-
-        return status
+        return QualityGateState.fromString(status)
     }
 
     @TaskAction

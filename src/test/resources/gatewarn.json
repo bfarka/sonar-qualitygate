@@ -1,0 +1,20 @@
+[
+  {
+    "id": 1,
+    "key": "sonar-qualitygate",
+    "name": "sonar-qualitygate",
+    "scope": "PRJ",
+    "qualifier": "TRK",
+    "date": "2014-11-23T12:31:02+0000",
+    "creationDate": "2014-11-23T12:29:23+0000",
+    "lname": "sonar-qualitygate",
+    "version": "1.0",
+    "description": "",
+    "msr": [
+      {
+        "key": "alert_status",
+        "data": "WARN"
+      }
+    ]
+  }
+]
