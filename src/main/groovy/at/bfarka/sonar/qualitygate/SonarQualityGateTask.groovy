@@ -16,6 +16,8 @@ class SonarQualityGateTask extends ConventionTask {
     String sonarProjectKey;
     @Input
     String sonarBranch
+    @Input
+    QualityGateState failOnState;
 
 
     public QualityGateState fetchQualityGateState() {

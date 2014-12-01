@@ -10,7 +10,7 @@ import org.gradle.api.Task
 class SonarQualityGatePlugin implements Plugin<Project> {
     @Override
     void apply(Project project) {
-        project.extensions.add("sonarQualityGate",  SonarQualityGateExtension.class)
+        project.extensions.add("sonarQualityGate",  SonarQualityGateExtension)
 
 
         SonarQualityGateTask task = project.task('sonarQualityGate', type: SonarQualityGateTask)
@@ -18,6 +18,7 @@ class SonarQualityGatePlugin implements Plugin<Project> {
         task.conventionMapping.sonarHostUrl = conventionMapping("sonarHostUrl","sonar.host.url", project)
         task.conventionMapping.sonarBranch = conventionMapping("sonarBranch", "sonar.branch", project)
         task.conventionMapping.sonarProjectKey = conventionMapping("sonarProjectKey","sonar.projectKey", project)
+        task.conventionMapping.failOnState = {project.extensions.sonarQualityGate.getFailOnState() }
 
         project.tasks.whenTaskAdded({ addedTask ->
             if (addedTask.name == "sonarRunner") {

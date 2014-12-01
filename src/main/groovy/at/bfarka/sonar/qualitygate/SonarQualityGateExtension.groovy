@@ -4,9 +4,18 @@ package at.bfarka.sonar.qualitygate
  * Created by berndfarka on 19.11.14.
  */
 class SonarQualityGateExtension {
-    String sonarHostUrl
 
-    String sonarProjectKey
+    public SonarQualityGateExtension(){
+        this.failOnState = QualityGateState.WARNING
+    }
 
-    String sonarBranch
+    def String sonarHostUrl
+
+    def String sonarProjectKey
+
+    def String sonarBranch
+
+    def QualityGateState failOnState = QualityGateState.ERROR
+
+
 }

@@ -7,6 +7,8 @@ import org.gradle.testfixtures.ProjectBuilder
 import org.junit.Assert
 import org.junit.Test
 
+import static at.bfarka.sonar.qualitygate.QualityGateState.ERROR
+import static at.bfarka.sonar.qualitygate.QualityGateState.WARNING
 import static org.hamcrest.Matchers.equalTo
 import static org.junit.Assert.assertNotNull
 import static org.junit.Assert.assertThat
@@ -93,6 +95,7 @@ public class SonarQualityGatePluginTest {
         assertThat(task.sonarHostUrl, equalTo("hostUrl"))
         assertThat(task.sonarProjectKey, equalTo("projectKey"))
         assertThat(task.sonarBranch, equalTo("branch"))
+        assertThat(task.failOnState, equalTo(WARNING))
 
     }
 
@@ -115,6 +118,7 @@ public class SonarQualityGatePluginTest {
             sonarHostUrl 'testUrl'
             sonarProjectKey 'testKey'
             sonarBranch 'testBranch'
+            setFailOnState(QualityGateState.ERROR)
         }
 
 
@@ -123,5 +127,6 @@ public class SonarQualityGatePluginTest {
         assertThat(task.sonarHostUrl, equalTo('testUrl'))
         assertThat(task.sonarBranch, equalTo('testBranch'))
         assertThat(task.sonarProjectKey, equalTo('testKey'))
+        assertThat(task.failOnState, equalTo(QualityGateState.ERROR))
     }
 }
