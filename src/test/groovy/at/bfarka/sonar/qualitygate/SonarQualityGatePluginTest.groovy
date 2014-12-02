@@ -8,6 +8,7 @@ import org.junit.Assert
 import org.junit.Test
 
 import static at.bfarka.sonar.qualitygate.QualityGateState.ERROR
+import static at.bfarka.sonar.qualitygate.QualityGateState.ERROR
 import static at.bfarka.sonar.qualitygate.QualityGateState.WARNING
 import static org.hamcrest.Matchers.equalTo
 import static org.junit.Assert.assertNotNull
@@ -118,7 +119,7 @@ public class SonarQualityGatePluginTest {
             sonarHostUrl 'testUrl'
             sonarProjectKey 'testKey'
             sonarBranch 'testBranch'
-            setFailOnState(QualityGateState.ERROR)
+            failOnState ERROR
         }
 
 
@@ -127,6 +128,6 @@ public class SonarQualityGatePluginTest {
         assertThat(task.sonarHostUrl, equalTo('testUrl'))
         assertThat(task.sonarBranch, equalTo('testBranch'))
         assertThat(task.sonarProjectKey, equalTo('testKey'))
-        assertThat(task.failOnState, equalTo(QualityGateState.ERROR))
+        assertThat(task.failOnState, equalTo(ERROR))
     }
 }
