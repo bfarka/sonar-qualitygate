@@ -15,7 +15,7 @@ class SonarQualityGateExtension {
 
     def String sonarBranch
 
-    def QualityGateState failOnState = QualityGateState.ERROR
+    def QualityGateState failOnState
 
 
 }
