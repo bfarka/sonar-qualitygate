@@ -21,16 +21,14 @@ class SonarQualityGatePlugin implements Plugin<Project> {
         task.conventionMapping.qualityGateState = {project.extensions.sonarQualityGate.qualityGateState}
         task.conventionMapping.failBuild = {project.extensions.sonarQualityGate.failBuild}
 
-        project.tasks.whenTaskAdded({ addedTask ->
-            if (addedTask.name == "sonarRunner") {
-                task.dependsOn addedTask
+        def depends = {
+            if (it.name == 'sonarRunner') {
+                task.dependsOn it
             }
-        })
-
-        Task sonarRunner = project.tasks.findByName("sonarRunner")
-        if (sonarRunner != null) {
-            task.dependsOn sonarRunner
         }
+
+        project.tasks.each depends
+        project.tasks.whenTaskAdded depends
 
     }
 

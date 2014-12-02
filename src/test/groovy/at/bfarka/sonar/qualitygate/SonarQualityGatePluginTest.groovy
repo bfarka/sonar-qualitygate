@@ -4,15 +4,15 @@ package at.bfarka.sonar.qualitygate
 import org.gradle.api.Plugin
 import org.gradle.api.Project
 import org.gradle.testfixtures.ProjectBuilder
-import org.junit.Assert
 import org.junit.Test
 
 import static at.bfarka.sonar.qualitygate.QualityGateState.ERROR
-import static at.bfarka.sonar.qualitygate.QualityGateState.ERROR
 import static at.bfarka.sonar.qualitygate.QualityGateState.WARNING
 import static org.hamcrest.Matchers.equalTo
+
 import static org.junit.Assert.assertNotNull
 import static org.junit.Assert.assertThat
+
 import static org.junit.Assert.assertTrue
 
 /**
@@ -41,11 +41,11 @@ public class SonarQualityGatePluginTest {
         Project project = ProjectBuilder.builder().build()
         project.apply plugin: 'at.bfarka.sonar.qualitygate'
         def extension = project.extensions.findByName("sonarQualityGate")
-        Assert.assertNotNull(extension)
-        Assert.assertTrue(extension instanceof SonarQualityGateExtension)
+        assertNotNull(extension)
+        assertTrue(extension instanceof SonarQualityGateExtension)
 
         def task = project.tasks.findByName("sonarQualityGate")
-        Assert.assertTrue(task instanceof SonarQualityGateTask);
+        assertTrue(task instanceof SonarQualityGateTask);
 
     }
 
@@ -121,6 +121,7 @@ public class SonarQualityGatePluginTest {
             sonarProjectKey 'testKey'
             sonarBranch 'testBranch'
             qualityGateState ERROR
+            failBuild false
         }
 
 
@@ -130,5 +131,6 @@ public class SonarQualityGatePluginTest {
         assertThat(task.sonarBranch, equalTo('testBranch'))
         assertThat(task.sonarProjectKey, equalTo('testKey'))
         assertThat(task.qualityGateState, equalTo(ERROR))
+        assertThat(task.failBuild, equalTo(false))
     }
 }
