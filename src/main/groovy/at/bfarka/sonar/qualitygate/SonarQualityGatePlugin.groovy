@@ -18,7 +18,8 @@ class SonarQualityGatePlugin implements Plugin<Project> {
         task.conventionMapping.sonarHostUrl = conventionMapping("sonarHostUrl","sonar.host.url", project)
         task.conventionMapping.sonarBranch = conventionMapping("sonarBranch", "sonar.branch", project)
         task.conventionMapping.sonarProjectKey = conventionMapping("sonarProjectKey","sonar.projectKey", project)
-        task.conventionMapping.failOnState = {project.extensions.sonarQualityGate.getFailOnState() }
+        task.conventionMapping.qualityGateState = {project.extensions.sonarQualityGate.qualityGateState}
+        task.conventionMapping.failBuild = {project.extensions.sonarQualityGate.failBuild}
 
         project.tasks.whenTaskAdded({ addedTask ->
             if (addedTask.name == "sonarRunner") {

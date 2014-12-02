@@ -6,16 +6,17 @@ package at.bfarka.sonar.qualitygate
 class SonarQualityGateExtension {
 
     public SonarQualityGateExtension(){
-        this.failOnState = QualityGateState.WARNING
+        this.qualityGateState = QualityGateState.WARNING
     }
 
-    def String sonarHostUrl
+     String sonarHostUrl
 
-    def String sonarProjectKey
+     String sonarProjectKey
 
-    def String sonarBranch
+     String sonarBranch
 
-    def QualityGateState failOnState
+     QualityGateState qualityGateState
 
+    boolean failBuild = true
 
 }

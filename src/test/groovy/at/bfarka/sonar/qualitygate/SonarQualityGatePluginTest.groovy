@@ -96,7 +96,8 @@ public class SonarQualityGatePluginTest {
         assertThat(task.sonarHostUrl, equalTo("hostUrl"))
         assertThat(task.sonarProjectKey, equalTo("projectKey"))
         assertThat(task.sonarBranch, equalTo("branch"))
-        assertThat(task.failOnState, equalTo(WARNING))
+        assertThat(task.qualityGateState, equalTo(WARNING))
+        assertThat(task.failBuild, equalTo(true))
 
     }
 
@@ -119,7 +120,7 @@ public class SonarQualityGatePluginTest {
             sonarHostUrl 'testUrl'
             sonarProjectKey 'testKey'
             sonarBranch 'testBranch'
-            failOnState ERROR
+            qualityGateState ERROR
         }
 
 
@@ -128,6 +129,6 @@ public class SonarQualityGatePluginTest {
         assertThat(task.sonarHostUrl, equalTo('testUrl'))
         assertThat(task.sonarBranch, equalTo('testBranch'))
         assertThat(task.sonarProjectKey, equalTo('testKey'))
-        assertThat(task.failOnState, equalTo(ERROR))
+        assertThat(task.qualityGateState, equalTo(ERROR))
     }
 }
