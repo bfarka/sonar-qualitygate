@@ -2,10 +2,12 @@ package at.bfarka.sonar.qualitygate
 
 import at.bfarka.sonar.qualitygate.util.MockRequest
 import at.bfarka.sonar.qualitygate.util.SonarMockRule
+import org.gradle.api.GradleException
 import org.gradle.api.Project
 import org.gradle.testfixtures.ProjectBuilder
 import org.junit.Rule
 import org.junit.Test
+import org.junit.rules.ExpectedException
 
 import static com.google.common.collect.ImmutableMap.builder
 import static org.hamcrest.Matchers.equalTo
@@ -16,6 +18,13 @@ import static org.junit.Assert.assertThat
  */
 class SonarQualityGateTaskTest {
 
+    @Rule
+    public final SonarMockRule mockServer = new SonarMockRule();
+
+    @Rule
+    public final ExpectedException expectedException = ExpectedException.none();
+
+
     private Project createProject() {
         Project project = ProjectBuilder.builder().build();
 
@@ -24,7 +33,7 @@ class SonarQualityGateTaskTest {
 
         project.sonarRunner {
             sonarProperties {
-                property "sonar.host.url", "http://127.0.0.1:8080/sonar"
+                property "sonar.host.url", mockServer.baseUrl
                 property "sonar.projectKey", "sonar-qualitygate"
                 property "sonar.branch", "branch"
             }
@@ -32,8 +41,7 @@ class SonarQualityGateTaskTest {
         return project
     }
 
-    @Rule
-    public SonarMockRule rule = new SonarMockRule();
+
 
     @Test
     public void testStates() {
@@ -44,16 +52,27 @@ class SonarQualityGateTaskTest {
 
     }
 
+
     public void test(String fileName, QualityGateState expectedState) {
 
-        rule.addMockRequest(new MockRequest("/api/resources", builder().put("metrics", "alert_status").put("resource", "sonar-qualitygate").put("format", "json").build(), fileName))
-
+        mockServer.addMockRequest('sonar-qualitygate', fileName)
         def project = createProject()
 
         SonarQualityGateTask task = project.tasks.findByName("sonarQualityGate")
         task.execute();
 
         assertThat(task.fetchQualityGateState(), equalTo(expectedState))
+        mockServer.resetServer();
+
+    }
+
+    @Test
+    public void testFailBuild(){
+        mockServer.addMockRequest('sonar-qualitygate', "gateerror.json")
+
+        def project = createProject()
+        expectedException.expect(GradleException.class)
+        project.tasks.sonarQualityGate.execute()
 
     }
 

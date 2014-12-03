@@ -1,6 +1,8 @@
 package at.bfarka.sonar.qualitygate
 
+import com.google.common.base.Preconditions
 import groovy.json.JsonSlurper
+import org.gradle.api.GradleException
 import org.gradle.api.internal.ConventionTask
 import org.gradle.api.tasks.Input
 import org.gradle.api.tasks.TaskAction
@@ -41,7 +43,14 @@ class SonarQualityGateTask extends ConventionTask {
 
     @TaskAction
     public void querySonar() {
-        println getSonarHostUrl()
+
+        if(isFailBuild()){
+            def fetchedState = fetchQualityGateState()
+            if(fetchedState.intValue()>= getQualityGateState().intValue()){
+                throw new GradleException("QualityGate check not passed! QualityGateState required: ${getQualityGateState()} but got: ${fetchedState}")
+            }
+        }
+
     }
 
 

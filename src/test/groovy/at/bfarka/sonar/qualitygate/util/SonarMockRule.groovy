@@ -1,26 +1,26 @@
 package at.bfarka.sonar.qualitygate.util
 
 import org.eclipse.jetty.server.Server
-import org.eclipse.jetty.servlet.ServletContextHandler
 import org.eclipse.jetty.servlet.ServletHandler
 import org.eclipse.jetty.servlet.ServletHolder
 import org.junit.Rule
 import org.junit.rules.ExternalResource
-import org.junit.rules.TestRule
-import org.junit.runner.Description
-import org.junit.runners.model.Statement
 
+import static com.google.common.collect.ImmutableMap.builder
 
 /**
  * Created by berndfarka on 23.11.14.
  */
-class SonarMockRule extends ExternalResource{
+class SonarMockRule extends ExternalResource {
 
-    private final Server server = new Server(8080);
+    private static final int PORT = 8080
+
+
+    private final Server server = new Server(PORT);
     private final MockServlet servlet = new MockServlet()
 
 
-    SonarMockRule(){
+    SonarMockRule() {
         // The ServletHandler is a dead simple way to create a context handler that is backed by an instance of a
         // Servlet.  This handler then needs to be registered with the Server object.
         ServletHandler handler = new ServletHandler();
@@ -32,9 +32,9 @@ class SonarMockRule extends ExternalResource{
         holder.setServlet(servlet);
         // !! This is a raw Servlet, not a servlet that has been configured through a web.xml or anything like that !!
         handler.addServletWithMapping(holder, "/sonar/*");
-
-
     }
+
+    final String baseUrl = "http://127.0.0.1:${PORT}/sonar"
 
     @Override
     protected void before() throws Throwable {
@@ -44,9 +44,20 @@ class SonarMockRule extends ExternalResource{
     @Override
     protected void after() {
         server.stop()
+        servlet.reset()
     }
 
-    public void addMockRequest(MockRequest request){
+    public void addMockRequest(def resource, def fileName) {
+        def request = new MockRequest("/api/resources", builder()
+                .put("metrics", "alert_status")
+                .put("resource", resource)
+                .put("format", "json")
+                .build()
+                , fileName)
         this.servlet.addRequest(request)
+    }
+
+    public void resetServer() {
+        this.servlet.reset()
     }
 }

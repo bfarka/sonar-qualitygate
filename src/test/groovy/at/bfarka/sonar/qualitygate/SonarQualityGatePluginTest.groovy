@@ -1,9 +1,10 @@
 package at.bfarka.sonar.qualitygate
 
-
+import at.bfarka.sonar.qualitygate.util.SonarMockRule
 import org.gradle.api.Plugin
 import org.gradle.api.Project
 import org.gradle.testfixtures.ProjectBuilder
+import org.junit.Rule
 import org.junit.Test
 
 import static at.bfarka.sonar.qualitygate.QualityGateState.ERROR
@@ -19,6 +20,9 @@ import static org.junit.Assert.assertTrue
  * Created by berndfarka on 15.11.14.
  */
 public class SonarQualityGatePluginTest {
+
+    @Rule
+    public final SonarMockRule mockServer = new SonarMockRule();
 
     @Test
     public void testPluginRegistration(){
@@ -77,6 +81,9 @@ public class SonarQualityGatePluginTest {
 
     @Test
     public void testPluginWithSonarExtension(){
+
+        mockServer.addMockRequest("projectKey", "gateok.json")
+
         Project project = ProjectBuilder.builder().build();
 
         project.apply plugin: "at.bfarka.sonar.qualitygate"
@@ -84,7 +91,7 @@ public class SonarQualityGatePluginTest {
 
         project.sonarRunner{
                 sonarProperties{
-                    property "sonar.host.url","hostUrl"
+                    property "sonar.host.url",mockServer.baseUrl
                     property "sonar.projectKey","projectKey"
                     property "sonar.branch","branch"
                 }
@@ -93,7 +100,7 @@ public class SonarQualityGatePluginTest {
 
         SonarQualityGateTask task = project.tasks.findByName("sonarQualityGate")
         task.execute();
-        assertThat(task.sonarHostUrl, equalTo("hostUrl"))
+        assertThat(task.sonarHostUrl, equalTo(mockServer.baseUrl))
         assertThat(task.sonarProjectKey, equalTo("projectKey"))
         assertThat(task.sonarBranch, equalTo("branch"))
         assertThat(task.qualityGateState, equalTo(WARNING))
@@ -103,6 +110,8 @@ public class SonarQualityGatePluginTest {
 
     @Test
     public void testExtension() {
+
+        mockServer.addMockRequest("projectKey", "gateok.json")
         Project project = ProjectBuilder.builder().build();
 
         project.apply plugin: "at.bfarka.sonar.qualitygate"
@@ -117,7 +126,7 @@ public class SonarQualityGatePluginTest {
         }
 
         project.sonarQualityGate {
-            sonarHostUrl 'testUrl'
+            sonarHostUrl mockServer.baseUrl
             sonarProjectKey 'testKey'
             sonarBranch 'testBranch'
             qualityGateState ERROR
@@ -127,7 +136,7 @@ public class SonarQualityGatePluginTest {
 
         SonarQualityGateTask task = project.tasks.findByName("sonarQualityGate")
         task.execute()
-        assertThat(task.sonarHostUrl, equalTo('testUrl'))
+        assertThat(task.sonarHostUrl, equalTo(mockServer.baseUrl))
         assertThat(task.sonarBranch, equalTo('testBranch'))
         assertThat(task.sonarProjectKey, equalTo('testKey'))
         assertThat(task.qualityGateState, equalTo(ERROR))
