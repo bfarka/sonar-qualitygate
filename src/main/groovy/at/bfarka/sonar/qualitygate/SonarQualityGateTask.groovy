@@ -29,9 +29,9 @@ class SonarQualityGateTask extends ConventionTask {
 
         String target = "${getSonarHostUrl()}/api/resources?metrics=alert_status&resource=${getSonarProjectKey()}&format=json"
 
-        def slurper = new JsonSlurper()
+        JsonSlurper slurper = new JsonSlurper()
 
-        def results = slurper.parse(target.toURL())
+        def results = slurper.parse(target.toURL().openStream())
 
         def status = null
 

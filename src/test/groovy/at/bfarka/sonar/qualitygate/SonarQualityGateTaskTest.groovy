@@ -57,6 +57,10 @@ class SonarQualityGateTaskTest {
 
         mockServer.addMockRequest('sonar-qualitygate', fileName)
         def project = createProject()
+        project.
+            sonarQualityGate{
+                failBuild false
+            }
 
         SonarQualityGateTask task = project.tasks.findByName("sonarQualityGate")
         task.execute();
